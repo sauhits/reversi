@@ -7,10 +7,10 @@ public class ArrayDB {
 
     public ArrayDB() {
         fillArrayIndex(0);
+        setWBarray(3, 3, 2);
+        setWBarray(3, 4, 1);
+        setWBarray(4, 3, 1);
         setWBarray(4, 4, 2);
-        setWBarray(4, 5, 1);
-        setWBarray(5, 4, 1);
-        setWBarray(5, 5, 2);
         showWBarray();
     }
 
@@ -28,9 +28,9 @@ public class ArrayDB {
         // setWBarray(5, 3, 1);
         // setWBarray(5, 6, 2);
         // test
-        System.err.println("  |1|2|3|4|5|6|7|8|");
+        System.err.println("  |a|b|c|d|e|f|g|h|");
         for (int y = 0; y < ARRAY_LENGTH; y++) {
-            System.out.print("|" + (y + 1) + "|");
+            System.out.print("|" + y  + "|");
             for (int x = 0; x < ARRAY_LENGTH; x++) {
                 processPrintFigure(WBarray[x][y]);
                 System.out.print("|");
@@ -61,10 +61,10 @@ public class ArrayDB {
     }
 
     public static void setWBarray(int x, int y, int Index) {
-        WBarray[(x - 1)][(y - 1)] = Index;
+        WBarray[x][y] = Index;
     }
 
     public static int getWBarray(int x, int y) {
-        return WBarray[(x - 1)][(y - 1)];
+        return WBarray[x][y];
     }
 }
