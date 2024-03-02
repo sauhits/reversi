@@ -5,6 +5,11 @@ public class Logic {
     public static int chooseY;
     // white:1 black:2
     public static int nowStone;
+    // 隣接している石の位置と色を格納
+    // 0 1 2
+    // 3 ● 4
+    // 5 6 7
+    public static int[] aroundStone = new int[8];
 
     public Logic() {
     }
@@ -51,11 +56,10 @@ public class Logic {
     }
 
     // 隣接する石の位置と色を配列にして返す
-    public static int[] stoneCheck(int x, int y) {
+    public static void stoneCheck(int x, int y) {
         // 0 1 2
         // 3 ● 4
         // 5 6 7
-        int[] aroundStone = new int[8];
         int count = 0;
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
@@ -68,15 +72,14 @@ public class Logic {
                 }
             }
         }
-        return aroundStone;
     }
 
     // 置くことができるか確認する
-    public static boolean installableCheck(int x,int y){
+    public static boolean installableCheck(int x, int y) {
         // 隣接した石の状況を格納した配列を取得
-        int[] aroundStone =stoneCheck(x, y);
-        for(int i=0;i<8;i++){
-            
+        aroundStone = stoneCheck(x, y);
+        for (int i = 0; i < 8; i++) {
+
         }
 
     }
