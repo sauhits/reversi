@@ -30,7 +30,7 @@ public class ArrayDB {
         // test
         System.err.println("  |a|b|c|d|e|f|g|h|");
         for (int y = 0; y < ARRAY_LENGTH; y++) {
-            System.out.print("|" + y  + "|");
+            System.out.print("|" + y + "|");
             for (int x = 0; x < ARRAY_LENGTH; x++) {
                 processPrintFigure(WBarray[x][y]);
                 System.out.print("|");
@@ -60,8 +60,20 @@ public class ArrayDB {
         }
     }
 
+    public static boolean checkOutOfIndex(int x, int y) {
+        try {
+            getWBarray(x, y);
+            return true;
+        } catch (IndexOutOfBoundsException i) {
+            return false;
+        }
+    }
+
     public static void setWBarray(int x, int y, int Index) {
-        WBarray[x][y] = Index;
+        try {
+            WBarray[x][y] = Index;
+        } catch (IndexOutOfBoundsException i) {
+        }
     }
 
     public static int getWBarray(int x, int y) {
