@@ -3,33 +3,87 @@ import java.util.Scanner;
 public class Logic {
     public static int chooseX;
     public static int chooseY;
+    // white:1 black:2
+    public static int nowStone;
 
     public Logic() {
-
     }
 
-    public static boolean chooseCoordinate(int x, int y, int Index) {
-        do {
+    // 座標を指定する
+    public static void chooseCoordinate() {
+        while (true) {
             Scanner sc = new Scanner(System.in);
             System.out.print("--------------------" + "\n" + "どこに置きますか？(123): ");
-
-        } while (adjoinCheck(x, y));
-
+            chooseY = sc.nextInt();
+            System.out.print("\n" + "どこに置きますか？(abc): ");
+            String strAlpha = sc.next();
+            chooseX = strAlphaToInt(strAlpha);
+            // 隣接を確認
+            if (!adjoinCheck(chooseX, chooseY)) {
+                break;
+            }
+        }
     }
 
-    public static int[] whiteCheck(int x, int y) {
+    // アルファベット指定をIntに変換する
+    public static int strAlphaToInt(String alpha) {
+        switch (alpha) {
+            case "a":
+                return 0;
+            case "b":
+                return 1;
+            case "c":
+                return 2;
+            case "d":
+                return 3;
+            case "e":
+                return 4;
+            case "f":
+                return 5;
+            case "g":
+                return 6;
+            case "h":
+                return 7;
+            default:
+                return 0;
+
+        }
+    }
+
+    // 隣接する石の位置と色を配列にして返す
+    public static int[] stoneCheck(int x, int y) {
         // 0 1 2
         // 3 ● 4
         // 5 6 7
-        int[] whiteStone = new int[8];
-
-        return whiteStone;
+        int[] aroundStone = new int[8];
+        int count = 0;
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                // 指定座標を省く
+                if (i != 0 || j != 0) {
+                    if (ArrayDB.checkOutOfIndex(x, y)) {
+                        aroundStone[count] = ArrayDB.getWBarray(x, y);
+                    }
+                    count++;
+                }
+            }
+        }
+        return aroundStone;
     }
 
-    // true: 隣接している
-    // false: 隣接していない
+    // 置くことができるか確認する
+    public static boolean installableCheck(int x,int y){
+        // 隣接した石の状況を格納した配列を取得
+        int[] aroundStone =stoneCheck(x, y);
+        for(int i=0;i<8;i++){
+            
+        }
+
+    }
+
+    // コマと隣接しているかどうか
+    // true: 隣接している false: 隣接していない
     public static boolean adjoinCheck(int x, int y) {
-        // コマと隣接しているかどうか
         int sumIndex = 0;
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
@@ -42,6 +96,7 @@ public class Logic {
         return sumIndex != ArrayDB.INDEX_NONE;
     }
 
+    // 終了条件の確認
     public static boolean endCheck() {
         for (int x = 0; x < ArrayDB.ARRAY_LENGTH; x++) {
             for (int y = 0; y < ArrayDB.ARRAY_LENGTH; y++) {
