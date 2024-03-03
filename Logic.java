@@ -19,13 +19,21 @@ public class Logic {
     public static void chooseCoordinate() {
         while (true) {
             try {
-                new ArrayDB();
+                ArrayDB.showWBarray();
                 Scanner sc = new Scanner(System.in);
                 System.out.print("--------------------" + "\n" + "どこに置きますか？(123): ");
                 chooseY = sc.nextInt();
+                if ((chooseY > 8) || (chooseY < 0)) {
+                    System.out.println("Please check number");
+                    continue;
+                }
                 System.out.print("\n" + "どこに置きますか？(abc): ");
                 String strAlpha = sc.next();
                 chooseX = strAlphaToInt(strAlpha);
+                if (chooseX == -1) {
+                    System.out.println("Please check alphabet");
+                    continue;
+                }
                 // 隣接を確認
                 if (adjoinCheck(chooseX, chooseY)) {
                     System.out.println("adjust");
@@ -58,7 +66,7 @@ public class Logic {
             case "h":
                 return 7;
             default:
-                return 0;
+                return -1;
 
         }
     }
@@ -104,7 +112,7 @@ public class Logic {
     }
 
     // 置くことができるか確認する
-    public static boolean installableCheck(int x, int y) {
+    public static boolean installableReverse(int x, int y) {
         // 隣接した石の状況を格納した配列を取得
         stoneCheck(x, y);
         // 隣接した石を走査する
@@ -123,9 +131,21 @@ public class Logic {
                         // 調べる石が配列範囲内であるか確認
                         targetStone[0] += increment[0];
                         targetStone[1] += increment[1];
+                        // 配列範囲の確認
                         if (ArrayDB.checkOutOfIndex(targetStone[0], targetStone[1])) {
                             // 調べる石の色を判定する
-                            if(ArrayDB.getWBarray(targetStone[0], targetStone[1])!=)
+                            int targetColor=ArrayDB.getWBarray(targetStone[0], targetStone[1]);
+                            // noneなら離脱
+                            if (targetColor == ArrayDB.INDEX_NONE) {
+                                break;
+                            }
+                            int differentColor = nowStone * -1;
+                            if(targetColor!=differentColor){
+                                j++;
+                                
+                            }
+                        }else{
+                            break;
                         }
                     }
                 }
@@ -154,19 +174,22 @@ public class Logic {
     // コマと隣接しているかどうか
     // true: 隣接している false: 隣接していない
     public static Boolean adjoinCheck(int x, int y) {
-        int sumIndex = 0;
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                if (ArrayDB.checkOutOfIndex(x, y)) {
-                    sumIndex += ArrayDB.getWBarray((x + i), (y + j));
+                if (0 == (i | j)) {
+                    // 指定座標を除外する
+                    continue;
                 }
-
+                // 配列範囲の確認
+                if (ArrayDB.checkOutOfIndex((x + i), (y + j))) {
+                    // 隣接マスがnoneでないか確認
+                    if (ArrayDB.getWBarray((x + i), (y + j)) != ArrayDB.INDEX_NONE) {
+                        return true;
+                    }
+                }
             }
         }
-        sumIndex -= ArrayDB.getWBarray(x, y);
-        // 指定コマ周辺のIndexを合計し，0であるか判定する．
-        // 周囲がすべてnoneである場合，SUMは0となる．
-        return sumIndex != ArrayDB.INDEX_NONE;
+        return false;
     }
 
     // 終了条件の確認

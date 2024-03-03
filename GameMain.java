@@ -4,6 +4,7 @@
 public class GameMain {
 
     public static void main(String[] args) {
+        new ArrayDB();
         while (true) {
             // 座標の指定
             Logic.chooseCoordinate();
