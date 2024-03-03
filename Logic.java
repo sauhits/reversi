@@ -37,6 +37,15 @@ public class Logic {
                 // 隣接を確認
                 if (adjoinCheck(chooseX, chooseY)) {
                     System.out.println("adjust");
+                    // 隣接するコマの中に返すことができるコマがあるか確認
+                    int[] distanceOfTurnable=new int[8];
+                    distanceOfTurnable=updateIncrement(chooseX, chooseY);
+                    for(int i=0;i<8;i++){
+                        // 空白もしくは同色なら何もしない
+                        if(distanceOfTurnable[i]==(nowStone|ArrayDB.INDEX_NONE)){
+                            
+                        }
+                    }
                     return;
                 }
                 System.out.println("Please adjust");
