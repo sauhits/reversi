@@ -25,8 +25,10 @@ public class Logic {
             chooseX = strAlphaToInt(strAlpha);
             // 隣接を確認
             if (!adjoinCheck(chooseX, chooseY)) {
+                System.out.print("adjust");
                 break;
             }
+            System.out.print("Please adjust");
         }
     }
 
@@ -74,12 +76,71 @@ public class Logic {
         }
     }
 
+    // aroundStone配列から指定座標への差分を返す
+    public static int[] aroundStoneToIncrement(int aroundStoneNum) {
+        int[] increment = new int[2];
+        // 0 1 2
+        // 3 ● 4
+        // 5 6 7
+        if (aroundStoneNum == (0 | 1 | 2)) {
+            increment[1] = 1;
+        }
+        if (aroundStoneNum == (5 | 6 | 7)) {
+            increment[1] = -1;
+        }
+        if (aroundStoneNum == (0 | 3 | 5)) {
+            increment[0] = -1;
+        }
+        if (aroundStoneNum == (2 | 4 | 7)) {
+            increment[0] = 1;
+        }
+        return increment;
+    }
+
     // 置くことができるか確認する
     public static boolean installableCheck(int x, int y) {
         // 隣接した石の状況を格納した配列を取得
-        aroundStone = stoneCheck(x, y);
+        stoneCheck(x, y);
+        // 隣接した石を走査する
         for (int i = 0; i < 8; i++) {
+            // targetStoneに隣接座標を格納
+            int[] increment = aroundStoneToIncrement(i);
+            int[] targetStone = new int[2];
+            targetStone[0] = x + increment[0];
+            targetStone[1] = y + increment[1];
+            // 配列の範囲確認(周囲8マス)
+            if (ArrayDB.checkOutOfIndex(targetStone[0], targetStone[1])) {
+                // 隣接石が存在するかどうかの確認
+                if (aroundStone[i] != ArrayDB.INDEX_NONE) {
+                    // 隣接石が他色であるならば同色までたどる
+                    for (int j = 0;;) {
+                        // 調べる石が配列範囲内であるか確認
+                        targetStone[0] += increment[0];
+                        targetStone[1] += increment[1];
+                        if (ArrayDB.checkOutOfIndex(targetStone[0], targetStone[1])) {
+                            // 調べる石の色を判定する
+                            if(ArrayDB.getWBarray(targetStone[0], targetStone[1])!=)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+    // 指定した座標の石が同色であるか他色であるかを返す
+    // 空白マスである場合はnullを返す
+    public static Boolean checkSameColor(int x, int y) {
+        try {
+            int color = ArrayDB.getWBarray(x, y);
+            if (color == nowStone) {
+                return true;
+            } else if (color == ArrayDB.INDEX_NONE) {
+                return null;
+            } else {
+                return false;
+            }
+        } catch (IndexOutOfBoundsException i) {
+            return false;
         }
 
     }
