@@ -1,10 +1,11 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Logic {
     public static int chooseX;
     public static int chooseY;
     // white:1 black:2
-    public static int nowStone;
+    public static int nowStone = -1;
     // 隣接している石の位置と色を格納
     // 0 1 2
     // 3 ● 4
@@ -17,18 +18,23 @@ public class Logic {
     // 座標を指定する
     public static void chooseCoordinate() {
         while (true) {
-            Scanner sc = new Scanner(System.in);
-            System.out.print("--------------------" + "\n" + "どこに置きますか？(123): ");
-            chooseY = sc.nextInt();
-            System.out.print("\n" + "どこに置きますか？(abc): ");
-            String strAlpha = sc.next();
-            chooseX = strAlphaToInt(strAlpha);
-            // 隣接を確認
-            if (!adjoinCheck(chooseX, chooseY)) {
-                System.out.print("adjust");
-                break;
+            try {
+                new ArrayDB();
+                Scanner sc = new Scanner(System.in);
+                System.out.print("--------------------" + "\n" + "どこに置きますか？(123): ");
+                chooseY = sc.nextInt();
+                System.out.print("\n" + "どこに置きますか？(abc): ");
+                String strAlpha = sc.next();
+                chooseX = strAlphaToInt(strAlpha);
+                // 隣接を確認
+                if (adjoinCheck(chooseX, chooseY)) {
+                    System.out.println("adjust");
+                    return;
+                }
+                System.out.println("Please adjust");
+            } catch (InputMismatchException inputMismatchException) {
+                System.out.println("Please check language");
             }
-            System.out.print("Please adjust");
         }
     }
 
@@ -147,11 +153,14 @@ public class Logic {
 
     // コマと隣接しているかどうか
     // true: 隣接している false: 隣接していない
-    public static boolean adjoinCheck(int x, int y) {
+    public static Boolean adjoinCheck(int x, int y) {
         int sumIndex = 0;
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                sumIndex += ArrayDB.getWBarray((x + i), (y + j));
+                if (ArrayDB.checkOutOfIndex(x, y)) {
+                    sumIndex += ArrayDB.getWBarray((x + i), (y + j));
+                }
+
             }
         }
         sumIndex -= ArrayDB.getWBarray(x, y);
