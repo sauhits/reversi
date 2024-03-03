@@ -71,23 +71,25 @@ public class Logic {
         }
     }
 
-    // 隣接する石の位置と色を配列にして返す
-    public static void stoneCheck(int x, int y) {
+    // 隣接する石の色を配列にして返す
+    public static int[] updateAroundStone(int x, int y) {
         // 0 1 2
         // 3 ● 4
         // 5 6 7
         int count = 0;
+        int[] around = new int[8];
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 // 指定座標を省く
                 if (i != 0 || j != 0) {
                     if (ArrayDB.checkOutOfIndex(x, y)) {
-                        aroundStone[count] = ArrayDB.getWBarray(x, y);
+                        around[count] = ArrayDB.getWBarray(x, y);
                     }
                     count++;
                 }
             }
         }
+        return around;
     }
 
     // aroundStone配列から指定座標への差分を返す
@@ -111,46 +113,40 @@ public class Logic {
         return increment;
     }
 
-    // 置くことができるか確認する
-    public static boolean installableReverse(int x, int y) {
-        // 隣接した石の状況を格納した配列を取得
-        stoneCheck(x, y);
-        // 隣接した石を走査する
+    // 近くの連続した他色の先にある同色石までの距離を方向とともに返す
+    public static int[] updateIncrement(int x, int y) {
+        int[] distance = new int[8];
+        // aroundStoneを更新する
+        aroundStone = updateAroundStone(x, y);
         for (int i = 0; i < 8; i++) {
-            // targetStoneに隣接座標を格納
-            int[] increment = aroundStoneToIncrement(i);
-            int[] targetStone = new int[2];
-            targetStone[0] = x + increment[0];
-            targetStone[1] = y + increment[1];
-            // 配列の範囲確認(周囲8マス)
-            if (ArrayDB.checkOutOfIndex(targetStone[0], targetStone[1])) {
-                // 隣接石が存在するかどうかの確認
-                if (aroundStone[i] != ArrayDB.INDEX_NONE) {
-                    // 隣接石が他色であるならば同色までたどる
-                    for (int j = 0;;) {
-                        // 調べる石が配列範囲内であるか確認
-                        targetStone[0] += increment[0];
-                        targetStone[1] += increment[1];
-                        // 配列範囲の確認
-                        if (ArrayDB.checkOutOfIndex(targetStone[0], targetStone[1])) {
-                            // 調べる石の色を判定する
-                            int targetColor=ArrayDB.getWBarray(targetStone[0], targetStone[1]);
-                            // noneなら離脱
-                            if (targetColor == ArrayDB.INDEX_NONE) {
-                                break;
-                            }
-                            int differentColor = nowStone * -1;
-                            if(targetColor!=differentColor){
-                                j++;
-                                
-                            }
-                        }else{
-                            break;
-                        }
+            // 方向に応じた座標差分を取得する
+            int[] increment = new int[2];
+            increment = aroundStoneToIncrement(i);
+            // 調べる座標を作成する
+            int[] targetCoordinate = new int[2];
+            targetCoordinate[0] = x + increment[0];
+            targetCoordinate[1] = y + increment[1];
+            // 走査開始
+            for (int j = 1;; j++) {
+                // 配列範囲の確認
+                if (!ArrayDB.checkOutOfIndex(targetCoordinate[0], targetCoordinate[1])) {
+                    // 配列範囲外なら離脱
+                    break;
+                } else {
+                    // 色の確認
+                    if (ArrayDB.getWBarray(targetCoordinate[0], targetCoordinate[1]) == nowStone) {
+                        // 同色なら離脱
+                        distance[i] = j;
+                        break;
+                    } else {
+                        // 他色なら進む
+                        targetCoordinate[0] += increment[0];
+                        targetCoordinate[1] += increment[1];
                     }
                 }
             }
         }
+        return distance;
     }
 
     // 指定した座標の石が同色であるか他色であるかを返す
