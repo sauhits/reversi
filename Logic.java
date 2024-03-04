@@ -21,32 +21,46 @@ public class Logic {
             try {
                 ArrayDB.showWBarray();
                 Scanner sc = new Scanner(System.in);
+                // y座標の指定（数値指定）
                 System.out.print("--------------------" + "\n" + "どこに置きますか？(123): ");
                 chooseY = sc.nextInt();
-                if ((chooseY > 8) || (chooseY < 0)) {
-                    System.out.println("Please check number");
-                    continue;
-                }
-                System.out.print("\n" + "どこに置きますか？(abc): ");
-                String strAlpha = sc.next();
-                chooseX = strAlphaToInt(strAlpha);
-                if (chooseX == -1) {
-                    System.out.println("Please check alphabet");
-                    continue;
-                }
-                // 隣接を確認
-                if (adjoinCheck(chooseX, chooseY)) {
-                    System.out.println("adjust");
-                    // 隣接するコマの中に返すことができるコマがあるか確認
-                    int[] distanceOfTurnable=new int[8];
-                    distanceOfTurnable=updateIncrement(chooseX, chooseY);
-                    for(int i=0;i<8;i++){
-                        // 空白もしくは同色なら何もしない
-                        if(distanceOfTurnable[i]==(nowStone|ArrayDB.INDEX_NONE)){
-                            
+                // 配列範囲の確認
+                if ((chooseY < 8) || (chooseY > 0)) {
+                    // x座標の指定（アルファベット)
+                    System.out.print("\n" + "どこに置きますか？(abc): ");
+                    String strAlpha = sc.next();
+                    // アルファベットから数値に変換
+                    chooseX = strAlphaToInt(strAlpha);
+                    // 想定数値の範囲外なら-1を返すのでこれで確認
+                    if (chooseX != -1) {
+                        // 隣接を確認
+                        if (adjoinCheck(chooseX, chooseY)) {
+                            System.out.println("adjust");
+                            // 隣接するコマの中に返すことができるコマがあるか確認
+                            int[] distanceOfTurnable = new int[8];
+                            distanceOfTurnable = updateIncrement(chooseX, chooseY);
+                            for (int i = 0; i < 8; i++) {
+                                // 空白もしくは同色なら何もしない
+                                if (distanceOfTurnable[i] < 2) {
+                                    continue;
+                                } else {
+                                    // 他色なら同色までたどって返す
+                                    for (int j = 1; j < distanceOfTurnable[i]; j++) {
+                                        int[] increment = new int[2];
+                                        increment = aroundStoneToIncrement(i);
+                                        ArrayDB.setWBarray((chooseX + (increment[0] * j)),
+                                                (chooseY + (increment[1] * j)),
+                                                nowStone);
+                                    }
+                                }
+                            }
+                            return;
                         }
+                    } else {
+                        System.out.println("Please check alphabet");
                     }
-                    return;
+                } else {
+                    System.out.println("Please check number");
                 }
                 System.out.println("Please adjust");
             } catch (InputMismatchException inputMismatchException) {

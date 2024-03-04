@@ -49,10 +49,10 @@ public class ArrayDB {
         // ターンの表示
         switch (Logic.nowStone) {
             case INDEX_WHITE:
-                System.out.println("Turn:WHITE" + "\n" + "Name:" + NAME_WHITE);
+                System.out.println("Turn:WHITE:" + "○" + "\n" + "Name:" + NAME_WHITE);
                 break;
             default:
-                System.out.println("Turn:BLACK" + "\n" + "Name:" + NAME_BLACK);
+                System.out.println("Turn:BLACK;" + "●" + "\n" + "Name:" + NAME_BLACK);
                 break;
         }
     }

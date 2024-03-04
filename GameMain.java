@@ -8,7 +8,7 @@ public class GameMain {
         while (true) {
             // 座標の指定
             Logic.chooseCoordinate();
-            ArrayDB.setWBarray(Logic.chooseX, Logic.chooseY, Logic.nowStone);
+            // ArrayDB.setWBarray(Logic.chooseX, Logic.chooseY, Logic.nowStone);
         }
     }
 }
