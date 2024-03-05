@@ -35,7 +35,7 @@ public class Logic {
                     if (chooseX != -1) {
                         // 隣接を確認
                         if (adjoinCheck(chooseX, chooseY)) {
-                            System.out.println("adjust");
+                            System.out.println("--------------------" + "\n" + "adjust");
                             // 隣接するコマの中に返すことができるコマがあるか確認
                             int[] distanceOfTurnable = new int[8];
                             distanceOfTurnable = updateIncrement(chooseX, chooseY);
@@ -57,14 +57,14 @@ public class Logic {
                             return;
                         }
                     } else {
-                        System.out.println("Please check alphabet");
+                        System.out.println("--------------------" + "\n" + "Please check alphabet");
                     }
                 } else {
-                    System.out.println("Please check number");
+                    System.out.println("--------------------" + "\n" + "Please check number");
                 }
-                System.out.println("Please adjust");
+                System.out.println("--------------------" + "\n" + "Please check adjust");
             } catch (InputMismatchException inputMismatchException) {
-                System.out.println("Please check language");
+                System.out.println("--------------------" + "\n" + "Please check language");
             }
         }
     }
@@ -105,13 +105,14 @@ public class Logic {
             for (int j = -1; j < 2; j++) {
                 // 指定座標を省く
                 if (i != 0 || j != 0) {
-                    if (ArrayDB.checkOutOfIndex(x, y)) {
-                        around[count] = ArrayDB.getWBarray(x, y);
+                    if (ArrayDB.checkOutOfIndex((x + j), (y + i))) {
+                        around[count] = ArrayDB.getWBarray((x + j), (y + i));
                     }
                     count++;
                 }
             }
         }
+        System.out.println("updateAroundStone end");
         return around;
     }
 
@@ -133,6 +134,7 @@ public class Logic {
         if (aroundStoneNum == (2 | 4 | 7)) {
             increment[0] = 1;
         }
+        System.out.println("aroundStoneToIncrement end");
         return increment;
     }
 
@@ -152,10 +154,7 @@ public class Logic {
             // 走査開始
             for (int j = 1;; j++) {
                 // 配列範囲の確認
-                if (!ArrayDB.checkOutOfIndex(targetCoordinate[0], targetCoordinate[1])) {
-                    // 配列範囲外なら離脱
-                    break;
-                } else {
+                if (ArrayDB.checkOutOfIndex(targetCoordinate[0], targetCoordinate[1])) {
                     // 色の確認
                     if (ArrayDB.getWBarray(targetCoordinate[0], targetCoordinate[1]) == nowStone) {
                         // 同色なら離脱
@@ -166,9 +165,12 @@ public class Logic {
                         targetCoordinate[0] += increment[0];
                         targetCoordinate[1] += increment[1];
                     }
+                } else {// 配列範囲外なら離脱
+                    break;
                 }
             }
         }
+        System.out.println("updateIncrement end");
         return distance;
     }
 
