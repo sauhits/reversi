@@ -24,39 +24,6 @@ public class ArrayDB {
         }
     }
 
-    // 盤面の表示
-    public static void showWBarray() {
-        // test
-        // setWBarray(5, 3, 1);
-        // setWBarray(5, 6, 2);
-        // test
-        // 手番の表示
-        System.out.println("====================");
-        showNowTurn();
-        System.err.println("  |a|b|c|d|e|f|g|h|");
-        for (int y = 0; y < ARRAY_LENGTH; y++) {
-            System.out.print("|" + y + "|");
-            for (int x = 0; x < ARRAY_LENGTH; x++) {
-                processPrintFigure(WBarray[x][y]);
-                System.out.print("|");
-            }
-            System.out.print("\n");
-        }
-    }
-
-    // 手番のプレイヤーネームと石の色を表示する
-    public static void showNowTurn() {
-        // ターンの表示
-        switch (Logic.nowStone) {
-            case INDEX_WHITE:
-                System.out.println("Turn:WHITE:" + "○" + "\n" + "Name:" + NAME_WHITE);
-                break;
-            default:
-                System.out.println("Turn:BLACK;" + "●" + "\n" + "Name:" + NAME_BLACK);
-                break;
-        }
-    }
-
     // Indexに応じて表示する記号を変更する
     public static void processPrintFigure(int Index) {
         switch (Index) {
@@ -81,6 +48,11 @@ public class ArrayDB {
         } else {
             return true;
         }
+    }
+
+    // 手番を交代する
+    public static void changeTurn() {
+        Logic.nowStone *= -1;
     }
 
     public static void setWBarray(int x, int y, int Index) {
