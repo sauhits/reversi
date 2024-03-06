@@ -9,7 +9,7 @@ public class Input {
                 inputYCoordinate();
                 // 配列範囲の確認
                 if ((Logic.chooseY < 8) || (Logic.chooseY > 0)) {
-
+                    inputXCoordinate();
                     // 想定数値の範囲外なら-1を返すのでこれで確認
                     if (Logic.chooseX != -1) {
                         // 隣接を確認

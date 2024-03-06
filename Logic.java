@@ -42,17 +42,13 @@ public class Logic {
         // 0 1 2
         // 3 ● 4
         // 5 6 7
-        int count = 0;
         int[] around = new int[8];
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                // 指定座標を省く
-                if (i != 0 || j != 0) {
-                    if (ArrayDB.checkOutOfIndex((x + j), (y + i))) {
-                        around[count] = ArrayDB.getWBarray((x + j), (y + i));
-                    }
-                    count++;
-                }
+        for (int i = 0; i < 8; i++) {
+            int targetX = x + aroundStoneToIncrement(i)[0];
+            int targetY = y + aroundStoneToIncrement(i)[1];
+            // 中心座標を除外する
+            if ((targetX == x) && (targetY == y)) {
+                i--;
             }
         }
         System.out.println("updateAroundStone end");
@@ -65,17 +61,17 @@ public class Logic {
         // 0 1 2
         // 3 ● 4
         // 5 6 7
-        if (aroundStoneNum == (0 | 1 | 2)) {
-            increment[1] = 1;
-        }
-        if (aroundStoneNum == (5 | 6 | 7)) {
-            increment[1] = -1;
-        }
         if (aroundStoneNum == (0 | 3 | 5)) {
             increment[0] = -1;
         }
         if (aroundStoneNum == (2 | 4 | 7)) {
             increment[0] = 1;
+        }
+        if (aroundStoneNum == (0 | 1 | 2)) {
+            increment[1] = 1;
+        }
+        if (aroundStoneNum == (5 | 6 | 7)) {
+            increment[1] = -1;
         }
         System.out.println("aroundStoneToIncrement end");
         return increment;
